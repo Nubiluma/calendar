@@ -1,24 +1,17 @@
 const express = require("express");
 const Appointment = require("./appointment");
+const db = require("./db");
 const app = express();
 const port = 3000;
-const appointments = [
-  new Appointment(
-    "Zahnarzt",
-    new Date(),
-    new Date(),
-    "Halt n Zahnarzttermin",
-    "Entenhausen"
-  ),
-];
+
 app.use(express.json({ extended: true, limit: "1mb" }));
 
 app.get("/", (_, res) => {
-  res.json(appointments);
+  res.json(db.getAll());
 });
 
 app.get("/:id", (req, res) => {
-  const requestedObject = appointments.find((e) => e.id === req.params.id);
+  const requestedObject = db.get(req.params.id);
   if (requestedObject) {
     res.json(requestedObject);
   } else {
@@ -35,7 +28,7 @@ app.post("/", (req, res) => {
       req.body.description,
       req.body.location
     );
-    appointments.push(appointment);
+    db.add(appointment);
     res.sendStatus(201);
   } catch (error) {
     res.sendStatus(400);
@@ -44,5 +37,5 @@ app.post("/", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Server started on port ${port}`);
 });

@@ -22,6 +22,6 @@ module.exports = class Appointment {
     this.dateEnd = dateEnd;
     this.description = description;
     this.location = location;
-    this.id = incrementedId++;
+    this.id = (incrementedId++).toString();
   }
 };
