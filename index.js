@@ -31,7 +31,7 @@ app.post("/", (req, res) => {
       req.body.location
     );
     db.add(appointment);
-    res.sendStatus(201);
+    res.setHeader("Location", `/${appointment.id}`).sendStatus(201);
   } catch (error) {
     res.sendStatus(400);
     console.error(error);
