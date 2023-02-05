@@ -1,0 +1,387 @@
+{
+	"info": {
+		"_postman_id": "e206e62a-c618-48e6-9074-4096acb9857f",
+		"name": "Calendar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getAll",
+			"item": [
+				{
+					"name": "Get All Appointments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Schema is valid', function () {\r",
+									"    const schema = {\r",
+									"        \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+									"        \"type\": \"array\",\r",
+									"        \"items\": [\r",
+									"            {\r",
+									"                \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"id\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"name\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"dateStart\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"dateEnd\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"description\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"location\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    }\r",
+									"                },\r",
+									"                \"required\": [\r",
+									"                    \"id\",\r",
+									"                    \"name\",\r",
+									"                    \"dateStart\",\r",
+									"                    \"dateEnd\",\r",
+									"                    \"description\",\r",
+									"                    \"location\"\r",
+									"                ]\r",
+									"            }\r",
+									"        ]\r",
+									"    }\r",
+									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if created element exists\", function () {\r",
+									"    const appointments = pm.response.json();\r",
+									"    const id = pm.environment.get('created_appointment_id');\r",
+									"    pm.expect(appointments).to.deep.include({\r",
+									"        \"name\": \"Zahnarzt\",\r",
+									"        \"dateStart\": \"2023-01-01T00:00:00.001Z\",\r",
+									"        \"dateEnd\": \"2023-01-02T00:00:00.001Z\",\r",
+									"        \"description\": \"Halt n Zahnarzttermin\",\r",
+									"        \"location\": \"Entenhausen\",\r",
+									"        \"id\": id\r",
+									"    })\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const url = pm.collectionVariables.get('URL');\r",
+									"\r",
+									"const appointment = {\r",
+									"    \"name\": \"Zahnarzt\",\r",
+									"    \"dateStart\": \"2023-01-01T00:00:00.001Z\",\r",
+									"    \"dateEnd\": \"2023-01-02T00:00:00.001Z\",\r",
+									"    \"description\": \"Halt n Zahnarzttermin\",\r",
+									"    \"location\": \"Entenhausen\",\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest({\r",
+									"    url,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Accept': '*/*',\r",
+									"        'Content-Type': 'application/json',\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(appointment)\r",
+									"    }\r",
+									"}, function (_, response) {\r",
+									"    const location = response.headers.get('Location');\r",
+									"    pm.expect(location).not.to.be.null;\r",
+									"    pm.expect(location[0]).to.eql('/');\r",
+									"    const idWithoutSlash = location.substring(1);\r",
+									"    pm.environment.set(\"created_appointment_id\", idWithoutSlash);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}",
+							"host": [
+								"{{URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "get",
+			"item": [
+				{
+					"name": "Get Individual Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Schema is valid', function () {\r",
+									"    const schema = {\r",
+									"        \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"            \"id\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"name\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"dateStart\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"dateEnd\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"description\": {\r",
+									"                \"type\": \"string\"\r",
+									"            },\r",
+									"            \"location\": {\r",
+									"                \"type\": \"string\"\r",
+									"            }\r",
+									"        },\r",
+									"        \"required\": [\r",
+									"            \"name\",\r",
+									"            \"dateStart\",\r",
+									"        ]\r",
+									"    }\r",
+									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test response content\", function () {\r",
+									"    const appointment = pm.response.json();\r",
+									"    const id = pm.environment.get('created_appointment_id2');\r",
+									"    pm.expect(appointment).to.eql({\r",
+									"        \"name\": \"Zahnarzt\",\r",
+									"        \"dateStart\": \"2023-01-01T00:00:00.001Z\",\r",
+									"        \"dateEnd\": \"2023-01-02T00:00:00.001Z\",\r",
+									"        \"description\": \"Halt n Zahnarzttermin\",\r",
+									"        \"location\": \"Entenhausen\",\r",
+									"        \"id\": id\r",
+									"    })\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const url = pm.collectionVariables.get('URL');\r",
+									"\r",
+									"const appointment = {\r",
+									"    \"name\": \"Zahnarzt\",\r",
+									"    \"dateStart\": \"2023-01-01T00:00:00.001Z\",\r",
+									"    \"dateEnd\": \"2023-01-02T00:00:00.001Z\",\r",
+									"    \"description\": \"Halt n Zahnarzttermin\",\r",
+									"    \"location\": \"Entenhausen\",\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest({\r",
+									"    url,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Accept': '*/*',\r",
+									"        'Content-Type': 'application/json',\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(appointment)\r",
+									"    }\r",
+									"}, function (_, response) {\r",
+									"    const location = response.headers.get('Location');\r",
+									"    pm.expect(location).not.to.be.null;\r",
+									"    pm.expect(location[0]).to.eql('/');\r",
+									"    const idWithoutSlash = location.substring(1);\r",
+									"    pm.environment.set(\"created_appointment_id2\", idWithoutSlash);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/{{created_appointment_id2}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{created_appointment_id2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail To Get Individual Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/foo",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"foo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "create",
+			"item": [
+				{
+					"name": "Create New Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Result contains location header\", function () {\r",
+									"    const location = pm.response.headers.get('Location');\r",
+									"    pm.expect(location).not.to.be.null;\r",
+									"    pm.expect(location).to.match(/\\/d*/);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Zahnarzt\",\r\n    \"dateStart\": \"2023-02-05T08:16:19.971Z\",\r\n    \"dateEnd\": \"2023-02-05T08:16:19.971Z\",\r\n    \"description\": \"Halt n Zahnarzttermin\",\r\n    \"location\": \"Entenhausen\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}",
+							"host": [
+								"{{URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail To Create New Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dateEnd\": \"2023-02-05T08:16:19.971Z\",\r\n    \"description\": \"Halt n Zahnarzttermin\",\r\n    \"location\": \"Entenhausen\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}",
+							"host": [
+								"{{URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://localhost:3000",
+			"type": "default"
+		}
+	]
+}
