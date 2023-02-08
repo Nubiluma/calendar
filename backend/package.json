@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "newman run Calendar.postman_collection.json"
+    "start": "nodemon backend/index.js",
+    "test": "newman run postman/Calendar.postman_collection.json"
   },
   "repository": {
     "type": "git",
