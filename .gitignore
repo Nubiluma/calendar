@@ -1,2 +1,10 @@
-node_modules
+# ide
 .idea
+
+# node
+node_modules
+
+# database
+mongo.zip
+data
+mongo
