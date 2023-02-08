@@ -2,10 +2,10 @@
   "name": "calender",
   "version": "1.0.0",
   "description": "",
-  "main": "backend/index.js",
+  "main": "index.js",
   "scripts": {
     "start": "nodemon backend/index.js",
-    "test": "newman run Calendar.postman_collection.json"
+    "test": "newman run postman/Calendar.postman_collection.json"
   },
   "repository": {
     "type": "git",
