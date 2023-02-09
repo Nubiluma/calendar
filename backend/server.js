@@ -33,7 +33,10 @@ server.use(middlewares);
 
 server.use(jsonServer.bodyParser);
 server.use((req, res, next) => {
-  if (req.path === "/appointments" && req.method === "POST") {
+  if (
+    req.path === "/appointments" &&
+    (req.method === "POST" || req.method === "PUT")
+  ) {
     if (!tv4.validate(req.body, createAppointmentSchema)) {
       console.log("received invalid body");
       res.sendStatus(400);
