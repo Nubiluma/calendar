@@ -2,22 +2,20 @@
 
 This app is an approach of a digital calendar, using vanilla JS and Node.js.
 
-## Install mongoDB
+## First run
+Initially you need to install depencies via:
 
-The calendar uses a MongoDB database. This can be downloaded via the following script:
-
-```
-cd backend
-npm run download-mongo
-```
-
-The mongo.zip must then be unpacked locally. Afterwards, the database can be started as described in 
-the [instructions](https://www.npmjs.com/package/mongodb#user-content-start-a-mongodb-server):
-
-```
-mkdir backend/data
-cd backend/mongo/mongodb-win-32-x86_64-windows-6.0.4
-.\bin\mongod.exe --dbpath=./../../../data
+```bash
+$ cd backend
+$ npm install
 ```
 
-After that, the mongodb runs on 127.0.0.1:27017.
+## Start server
+To start the server run:
+
+```bash
+$ cd backend
+$ npm start
+```
+
+Open server on http://localhost:3000/appointments
